@@ -1,4 +1,4 @@
-namespace SigmaCandidate.API
+namespace SigmaCandidate
 {
     public class WeatherForecast
     {
