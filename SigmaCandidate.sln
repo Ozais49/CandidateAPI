@@ -5,7 +5,12 @@ VisualStudioVersion = 17.11.35431.28
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SigmaCandidate", "SigmaCandidate.API\SigmaCandidate.csproj", "{6877C9FE-A452-4FBA-BE07-21A03DBF72ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SigmaCandidate.Test", "SigmaCandidate.Test\SigmaCandidate.Test.csproj", "{88B3AD51-A8FC-4B25-8EF6-FF071AEFD35E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SigmaCandidate.Test", "SigmaCandidate.Test\SigmaCandidate.Test.csproj", "{88B3AD51-A8FC-4B25-8EF6-FF071AEFD35E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D0EBFB61-3B8F-4B94-B0A2-AAC115566567}"
+	ProjectSection(SolutionItems) = preProject
+		Readme.md = Readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
