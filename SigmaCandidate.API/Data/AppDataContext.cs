@@ -3,9 +3,9 @@ using SigmaCandidate.Model;
 
 namespace SigmaCandidate.Data
 {
-    public class AppDataContext:DbContext
+    public class AppDbContext:DbContext
     {
-        public AppDataContext(DbContextOptions<AppDataContext> options):base (options)
+        public AppDbContext(DbContextOptions<AppDbContext> options):base (options)
         {
             
         }
