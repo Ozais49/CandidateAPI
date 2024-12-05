@@ -5,10 +5,10 @@ namespace SigmaCandidate.Repository
     public interface ICandidateRepository
     {
         //Task<Candidate> GetCandidateById(int id);
-        Task<Candidate> GetCandidateByEmail(string email);
-        Task CreateCandidate(Candidate candidate);
+        Task<Candidate> GetCandidateByEmailAsync(string email);
+        Task CreateCandidateAsync(Candidate candidate);
         void UpdateCandidate(Candidate candidate);
-        Task<int> SaveChanges();
+        Task<int> SaveChangesAsync();
 
     }
 }

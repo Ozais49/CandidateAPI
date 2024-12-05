@@ -11,12 +11,12 @@ namespace SigmaCandidate.Repository
         {
             _appDbContext = appDbContext;
         }
-        public async Task CreateCandidate(Candidate candidate)
+        public async Task CreateCandidateAsync(Candidate candidate)
         {
            await _appDbContext.Candidates.AddAsync(candidate);
         }
 
-        public async Task<Candidate> GetCandidateByEmail(string email)
+        public async Task<Candidate> GetCandidateByEmailAsync(string email)
         {
             return await _appDbContext.Candidates.FirstOrDefaultAsync(x=>x.Email == email);
         }
@@ -30,7 +30,7 @@ namespace SigmaCandidate.Repository
         {
             _appDbContext.Candidates.Update(candidate);
         }
-        public async Task<int> SaveChanges()
+        public async Task<int> SaveChangesAsync()
         {
            return  await _appDbContext.SaveChangesAsync();
         }
