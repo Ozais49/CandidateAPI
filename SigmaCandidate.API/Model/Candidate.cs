@@ -30,10 +30,10 @@ namespace SigmaCandidate.Model
 
         public string? CallTimeInterval { get; set; }
 
-        //[Url]
+        [Url]
         public string? LinkedInUrl { get; set; }
 
-        //[Url]
+        [Url]
         public string? GitHubUrl { get; set; }
 
         public string Comment { get; set; }
