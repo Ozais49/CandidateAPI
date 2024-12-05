@@ -398,3 +398,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/SigmaCandidate.API/candidates.db
+/SigmaCandidate.API/candidates.db-shm
+/SigmaCandidate.API/candidates.db-wal

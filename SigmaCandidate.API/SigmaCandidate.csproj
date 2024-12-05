@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="candidates.db" />
+    <None Remove="candidates.db-shm" />
+    <None Remove="candidates.db-wal" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.1.0" />
