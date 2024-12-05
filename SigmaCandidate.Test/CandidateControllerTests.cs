@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Moq;
 using Newtonsoft.Json.Linq;
 using SigmaCandidate.Controllers;
 using SigmaCandidate.Data;
 using SigmaCandidate.Model;
 using SigmaCandidate.Repository;
+using System.ComponentModel.DataAnnotations;
 
 namespace SigmaCandidate.Test
 {
@@ -24,6 +26,26 @@ namespace SigmaCandidate.Test
                 _controller = new CandidatesController(_mockRepository.Object);
             }
 
+            private bool TryValidateObject<T>(T model, ModelStateDictionary modelState)
+            {
+                var validationContext = new ValidationContext(model);
+                var validationResults = new List<ValidationResult>();
+                var isValid = Validator.TryValidateObject(model, validationContext, validationResults, validateAllProperties: true);
+
+                if (!isValid)
+                {
+                    foreach (var validationResult in validationResults)
+                    {
+                        foreach (var memberName in validationResult.MemberNames)
+                        {
+                            modelState.AddModelError(memberName, validationResult.ErrorMessage);
+                        }
+                    }
+                }
+
+                return isValid;
+            }
+
 
 
             [Fact]
@@ -33,8 +55,11 @@ namespace SigmaCandidate.Test
                 {
                     FirstName = "John",
                     LastName = "Doe",
+                    Comment = "Hi I am John Doe."
                 };
-                _controller.ModelState.AddModelError("Email", "The Email field is required.");
+
+
+                TryValidateObject<Candidate>(candidate, _controller.ModelState);
                 var result = await _controller.UpsertCandidate(candidate);
 
                 var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
@@ -43,16 +68,56 @@ namespace SigmaCandidate.Test
                 Assert.Contains("The Email field is required.", errorResponse.Errors);
             }
 
+            [Fact]
+            public async Task UpsertCandidate_ShouldReturnBadRequest_WhenFirstAndLastNameExceeds50Characters()
+            {
+                var candidate = new Candidate
+                {
+                    FirstName = new string('J', 55),
+                    LastName = new string('D', 55),
+                    Email = "john@doe.com"
+                };
+                TryValidateObject<Candidate>(candidate, _controller.ModelState);
+
+                var result = await _controller.UpsertCandidate(candidate);
+
+                var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+                var errorResponse = Assert.IsType<ErrorResponse>(badRequestResult.Value);
+                Assert.NotNull(errorResponse.Errors);
+                Assert.Contains("The field FirstName must be a string or array type with a maximum length of '50'.", errorResponse.Errors);
+            }
+
+            [Fact]
+            public async Task UpsertCandidate_ShouldReturnBadRequest_WhenLastNameExceeds50Characters()
+            {
+                var candidate = new Candidate
+                {
+                    FirstName = "John",
+                    LastName = new string('D', 55),
+                    Email = "john@doe.com",
+                    Comment="Hi I am john doe."
+                   
+                };
+
+                TryValidateObject<Candidate>(candidate, _controller.ModelState);
+
+                var result = await _controller.UpsertCandidate(candidate);
+
+                var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+                var errorResponse = Assert.IsType<ErrorResponse>(badRequestResult.Value);
+                Assert.NotNull(errorResponse.Errors);
+                Assert.Contains("The field LastName must be a string or array type with a maximum length of '50'.", errorResponse.Errors);
+            }
+
 
 
             [Fact]
             public async Task UpsertCandidate_ShouldReturnBadRequest_WhenModelStateIsInvalid()
             {
-                var candidate = new Candidate(); 
-                _controller.ModelState.AddModelError("FirstName", "The FirstName field is required.");
-                _controller.ModelState.AddModelError("LastName", "The LastName field is required.");
-                _controller.ModelState.AddModelError("Email", "The Email field is required.");
-                _controller.ModelState.AddModelError("Comment", "The Comment field is required.");
+                var candidate = new Candidate();
+
+                TryValidateObject<Candidate>(candidate, _controller.ModelState);
+
 
                 var result = await _controller.UpsertCandidate(candidate);
 
@@ -60,6 +125,9 @@ namespace SigmaCandidate.Test
                 var errorResponse = Assert.IsType<ErrorResponse>(badRequestResult.Value);
                 Assert.NotNull(errorResponse.Errors);
                 Assert.Contains("The FirstName field is required.", errorResponse.Errors);
+                Assert.Contains("The Email field is required.", errorResponse.Errors);
+                Assert.Contains("The LastName field is required.", errorResponse.Errors);
+                Assert.Contains("The Comment field is required.", errorResponse.Errors);
                 Assert.Equal<int>(4, errorResponse.Errors.Count);
             }
 
@@ -99,7 +167,7 @@ namespace SigmaCandidate.Test
                 };
 
                 _mockRepository.Setup(repo => repo.GetCandidateByEmailAsync(candidate.Email))
-                    .ReturnsAsync(default (Candidate));
+                    .ReturnsAsync(default(Candidate));
 
                 var result = await _controller.UpsertCandidate(candidate);
 
