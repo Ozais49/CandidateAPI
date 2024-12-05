@@ -21,10 +21,10 @@ namespace SigmaCandidate.Repository
             return await _appDbContext.Candidates.FirstOrDefaultAsync(x=>x.Email == email);
         }
 
-        public async Task<Candidate> GetCandidateById(int id)
-        {
-            return await _appDbContext.Candidates.FirstOrDefaultAsync(x => x.Id == id);
-        }
+        //public async Task<Candidate> GetCandidateById(int id)
+        //{
+        //    return await _appDbContext.Candidates.FirstOrDefaultAsync(x => x.Id == id);
+        //}
 
         public void UpdateCandidate(Candidate candidate)
         {

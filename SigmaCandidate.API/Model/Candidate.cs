@@ -9,8 +9,8 @@ namespace SigmaCandidate.Model
 {
     public class Candidate
     {
-        [Key]
-        public int Id { get; set; }
+        //[Key]
+        //public int Id { get; set; }
 
         [Required]
         [MaxLength(50)]
@@ -22,9 +22,9 @@ namespace SigmaCandidate.Model
 
         [Required]
         [EmailAddress]
+        [Key]
         public string Email { get; set; }
 
-        [Phone]
         public string PhoneNumber { get; set; }
 
         public string CallTimeInterval { get; set; }
