@@ -35,7 +35,7 @@ namespace SigmaCandidate.Model
 
         [Url]
         public string? GitHubUrl { get; set; }
-
+        [Required]
         public string Comment { get; set; }
     }
 }

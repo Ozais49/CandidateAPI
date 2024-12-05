@@ -32,7 +32,7 @@ namespace SigmaCandidate.Controllers
                     .Select(e => e.ErrorMessage)
                     .ToList();
 
-                return BadRequest(new { Errors = errors });
+                return BadRequest(new ErrorResponse { Errors = errors });
             }
             try
             {
